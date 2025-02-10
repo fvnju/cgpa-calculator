@@ -16,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} text-white`}>
-      <body className="overscroll-none">
+      <body className="max-h-dvh overflow-hidden overscroll-none">
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>

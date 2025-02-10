@@ -202,11 +202,11 @@ export default function Page() {
   }, [courses]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[#121212] text-white">
+    <main className="h-dvh items-center justify-center overflow-hidden bg-[#121212] text-white">
       <div className="flex h-16 w-full items-center border-b-2 border-[#37474F]/20 px-6 md:px-12">
         <Logo />
       </div>
-      <div className="flex h-full w-full flex-grow flex-col px-6 py-6 md:px-12">
+      <div className="flex h-[88%] w-full flex-col px-6 py-6 md:px-12">
         <div className="mb-4 flex w-full items-center justify-start">
           <TooltipProvider>
             <Tooltip>
@@ -241,7 +241,7 @@ export default function Page() {
         <DataTable columns={columns} data={useAtomValue(courseArrayAtom)} />
 
         <DrawerDialog>
-          <Button className="mt-8 rounded-xl md:self-end md:justify-self-center">
+          <Button className="flex-0 mt-8 rounded-xl md:self-end md:justify-self-center">
             Add Course
           </Button>
         </DrawerDialog>

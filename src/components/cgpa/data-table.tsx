@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
   const [, setCourseArray] = useAtom(courseArrayAtom);
 
   return (
-    <div className="flex w-full flex-grow flex-col rounded-xl border">
+    <div className="flex h-full flex-1 flex-col rounded-xl border">
       <Table className="h-full w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
