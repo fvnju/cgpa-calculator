@@ -1,11 +1,9 @@
 import Link from "next/link";
 
-import { LatestPost } from "~/app/_components/post";
-import { RainbowButton } from "~/components/magicui/rainbow-button";
 import Logo from "~/components/Logo";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
 import { LineShadowText } from "~/components/magicui/line-shadow-text";
-import { ShimmerButton } from "~/components/magicui/shimmer-button";
+
 import { Suspense } from "react";
 import { AnimatedShinyText } from "~/components/magicui/animated-shiny-text";
 import { cn } from "~/lib/utils";
@@ -46,7 +44,7 @@ export default async function Home() {
           </div>
 
           <Link href={"/cgpa"} className="btn-glitch-fill group mt-10">
-            <span className="text">// Get Started</span>
+            <span className="text">{`// Get Started`}</span>
             <span className="text-decoration"> _</span>
             <span className="decoration">⇒</span>
           </Link>

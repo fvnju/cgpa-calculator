@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "~/lib/utils";
-import { motion, MotionProps } from "motion/react";
+import { motion, type MotionProps } from "motion/react";
 
 interface LineShadowTextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, keyof MotionProps>,
