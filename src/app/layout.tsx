@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} text-white`}>
       <head>
-        {process.env.NODE_ENV !== "development" && (
+        {process.env.NODE_ENV === "development" && (
           <Script
             strategy="afterInteractive"
             crossOrigin="anonymous"

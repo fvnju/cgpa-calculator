@@ -39,6 +39,7 @@ import { atom, useAtomValue, useAtom } from "jotai";
 import Papa from "papaparse";
 
 export const courseArrayAtom = atom<Course[]>([]);
+const storageLocation = "demoTranscript";
 
 export function DrawerDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState<boolean | undefined>(false);
@@ -166,6 +167,21 @@ function CourseForm({
 export default function Page() {
   const [courses, setCourses] = useAtom(courseArrayAtom);
 
+  useEffect(() => {
+    localStorage.setItem(storageLocation, JSON.stringify(courses));
+    console.log("store change");
+  }, [courses]);
+
+  React.useLayoutEffect(() => {
+    if (!localStorage.getItem(storageLocation) && !courses.length) {
+      localStorage.setItem(storageLocation, JSON.stringify([]));
+    } else if (localStorage.getItem(storageLocation)) {
+      setCourses(
+        JSON.parse(localStorage.getItem(storageLocation)!) as typeof courses,
+      );
+    }
+  }, []);
+
   const uploadRef = React.useRef<HTMLInputElement>(null);
 
   return (
@@ -206,22 +222,18 @@ export default function Page() {
                   toast.warning("CSV parsing had an error");
                 }
 
-                try {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                  courseSchema.parse(results.data[0]);
-                  setCourses((prev) => [
-                    ...prev,
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    ...results.data,
-                  ]);
-                  toast.success("CSV was imported successfully.");
-                } catch (e: unknown) {
-                  if (e instanceof z.ZodError && e.issues.length) {
-                    toast.warning(
-                      "CSV was not formated properly. make sure the header matches the heading on the table (lowercase).",
-                    );
+                const newEntries: Course[] = [];
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                for (const item of results.data) {
+                  try {
+                    newEntries.push(courseSchema.parse(item));
+                  } catch (error: unknown) {
+                    if (error instanceof z.ZodError && error.issues.length) {
+                    }
                   }
                 }
+                setCourses((prev) => [...prev, ...newEntries]);
+                toast.success("CSV was imported successfully.");
 
                 uploadRef.current!.value = "";
               };

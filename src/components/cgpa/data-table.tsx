@@ -33,6 +33,7 @@ import NumberFlow from "@number-flow/react";
 import { Checkbox } from "../ui/checkbox";
 import { CustomDrawerDialog, customModalState } from "./state";
 import { useMediaQuery } from "./page";
+import { CSVDownloader } from "./csvDownloader";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -136,6 +137,9 @@ export function DataTable<TData, TValue>({
               )
             }
             variant={"outline"}
+            onClick={() => {
+              CSVDownloader(courses, "file.csv");
+            }}
           >
             Export as CSV
           </Button>
