@@ -28,7 +28,7 @@ export default async function Home() {
                 )}
               >
                 <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
-                  <span>✨ Still in Beta</span>
+                  <span>✨ Still in Alpha</span>
                 </AnimatedShinyText>
               </div>
             </div>
@@ -47,7 +47,7 @@ export default async function Home() {
             </h1>
           </div>
 
-          <Link href={"/cgpa"} className="btn-glitch-fill group mt-10">
+          <Link href={"/demo"} className="btn-glitch-fill group mt-10">
             <span className="text">{`// Get Started`}</span>
             <span className="text-decoration"> _</span>
             <span className="decoration">⇒</span>

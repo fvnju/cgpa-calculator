@@ -1,12 +1,11 @@
 "use client";
 import Logo from "~/components/Logo";
 import { DataTable } from "./data-table";
-import { columns, type Course } from "./columns";
+import { columns, courseSchema, type Course } from "./columns";
 import { Button } from "~/components/ui/button";
 import { Toaster } from "~/components/ui/sonner";
 
 import * as React from "react";
-import NumberFlow from "@number-flow/react";
 import { cn } from "~/lib/utils";
 import {
   Dialog,
@@ -37,6 +36,7 @@ import {
 } from "~/components/ui/select";
 import { useForm } from "react-hook-form";
 import { atom, useAtomValue, useAtom } from "jotai";
+import Papa from "papaparse";
 
 export const courseArrayAtom = atom<Course[]>([]);
 
@@ -163,88 +163,89 @@ function CourseForm({
   );
 }
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-
 export default function Page() {
-  const courses = useAtomValue(courseArrayAtom);
-  type gradeType = "A" | "B" | "C" | "D" | "E" | "F";
+  const [courses, setCourses] = useAtom(courseArrayAtom);
 
-  const calculateCGPA = React.useCallback((): number => {
-    const getGradePoint = (grade: gradeType): number => {
-      const gradePoints = new Map<gradeType, number>([
-        ["A", 5],
-        ["B", 4],
-        ["C", 3],
-        ["D", 2],
-        ["E", 1],
-        ["F", 0],
-      ]);
-      return gradePoints.get(grade) ?? 0;
-    };
-
-    if (courses.length === 0) return 0.0;
-
-    const totalCreditUnits = courses.reduce(
-      (sum, course) => sum + course.credit,
-      0,
-    );
-    const totalPoints = courses.reduce((sum, course) => {
-      const gradePoint = getGradePoint(course.grade);
-      return sum + gradePoint * course.credit;
-    }, 0);
-
-    return Number((totalPoints / totalCreditUnits).toFixed(2));
-  }, [courses]);
+  const uploadRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <main className="h-dvh items-center justify-center overflow-hidden bg-[#121212] text-white">
-      <div className="flex h-16 w-full items-center border-b-2 border-[#37474F]/20 px-6 md:px-12">
-        <Logo />
+    <main className="flex h-dvh flex-col items-center justify-center overflow-hidden bg-[#121212] text-white">
+      <div className="flex h-16 w-full items-center justify-between border-b-2 border-[#37474F]/20 px-6 md:px-12">
+        <Link href="/">
+          <Logo />
+        </Link>
+        <h3 className="cursor-default select-none scroll-m-20 text-xl font-semibold tracking-tight text-white/20">
+          Demo
+        </h3>
       </div>
-      <div className="flex h-[88%] w-full flex-col px-6 py-6 md:px-12">
-        <div className="mb-4 flex w-full items-center justify-start">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <p
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      calculateCGPA().toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      }),
-                    )
-                  }
-                  className="cursor-pointer font-mono text-3xl font-semibold"
-                >
-                  <span className="text-sm">CPGA: </span>
-                  <NumberFlow
-                    format={{
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    }}
-                    value={calculateCGPA()}
-                  />
-                </p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Copy CGPA</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+      <div className="flex w-full flex-1 flex-col px-6 py-6 md:px-12">
         <DataTable columns={columns} data={useAtomValue(courseArrayAtom)} />
 
-        <DrawerDialog>
-          <Button className="flex-0 mt-8 rounded-xl md:self-end md:justify-self-center">
-            Add Course
+        <div className="mt-4 flex flex-col gap-4 md:flex-row md:justify-end md:gap-8">
+          <Input
+            accept=".csv"
+            ref={uploadRef}
+            onChange={(event) => {
+              const file = event.target.files![0];
+
+              if (!file) return;
+
+              const reader = new FileReader();
+
+              reader.onload = function (e) {
+                const text = e.target!.result;
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-base-to-string
+                const results = Papa.parse<Course>(String(text), {
+                  header: true, // Treat first row as headers
+                  dynamicTyping: true, // convert numbers automatically
+                });
+
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (results.errors.length) {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+                  toast.warning("CSV parsing had an error");
+                }
+
+                try {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                  courseSchema.parse(results.data[0]);
+                  setCourses((prev) => [
+                    ...prev,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    ...results.data,
+                  ]);
+                  toast.success("CSV was imported successfully.");
+                } catch (e: unknown) {
+                  if (e instanceof z.ZodError && e.issues.length) {
+                    toast.warning(
+                      "CSV was not formated properly. make sure the header matches the heading on the table (lowercase).",
+                    );
+                  }
+                }
+
+                uploadRef.current!.value = "";
+              };
+
+              reader.readAsText(file);
+            }}
+            className="hidden"
+            type="file"
+          />
+          <Button
+            type="button"
+            role="button"
+            className="rounded-xl"
+            variant={"secondary"}
+            onClick={() => {
+              uploadRef.current?.click();
+            }}
+          >
+            Import CSV
           </Button>
-        </DrawerDialog>
+          <DrawerDialog>
+            <Button className="rounded-xl">Add Course</Button>
+          </DrawerDialog>
+        </div>
         <Toaster position="top-center" richColors />
       </div>
     </main>
@@ -252,8 +253,11 @@ export default function Page() {
 }
 
 import { useEffect, useState } from "react";
+import Link from "next/dist/client/link";
+import { toast } from "sonner";
+import { z } from "zod";
 
-function useMediaQuery(query: string) {
+export function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {

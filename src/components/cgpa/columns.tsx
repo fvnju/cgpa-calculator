@@ -1,14 +1,37 @@
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
+import { z } from "zod";
+import { Checkbox } from "../ui/checkbox";
 
-export type Course = {
-  course: string;
-  credit: number;
-  grade: "A" | "B" | "C" | "D" | "E" | "F";
-};
+export const courseSchema = z
+  .object({
+    selected: z.boolean().optional(),
+    course: z.string(),
+    credit: z.number(),
+    grade: z.enum(["A", "B", "C", "D", "E", "F"]),
+  })
+  .strict();
+
+export type Course = z.infer<typeof courseSchema>;
 
 export const columns: ColumnDef<Course>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "course",
     header: "Course",
