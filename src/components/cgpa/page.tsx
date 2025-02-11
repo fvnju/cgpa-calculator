@@ -180,6 +180,7 @@ export default function Page() {
         JSON.parse(localStorage.getItem(storageLocation)!) as typeof courses,
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const uploadRef = React.useRef<HTMLInputElement>(null);
