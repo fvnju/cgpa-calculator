@@ -7,8 +7,8 @@ import { Checkbox } from "../ui/checkbox";
 export const courseSchema = z
   .object({
     selected: z.boolean().optional(),
-    course: z.string(),
-    credit: z.number(),
+    course: z.string().min(3),
+    credit: z.number().min(1),
     grade: z.enum(["A", "B", "C", "D", "E", "F"]),
   })
   .strict();

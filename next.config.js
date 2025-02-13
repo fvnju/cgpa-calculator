@@ -14,6 +14,11 @@ const config = {
           "https://heavenly-handstand-a1b.notion.site/Release-Notes-1967a08dca3d8090bad4ec73361f2697",
         permanent: false,
       },
+      {
+        source: "/cgpa",
+        destination: "/demo",
+        permanent: false,
+      },
     ];
   },
 };

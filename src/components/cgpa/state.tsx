@@ -39,7 +39,7 @@ export function CustomDrawerDialog({
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Table</DialogTitle>
+            <DialogTitle>Options</DialogTitle>
             <DialogDescription>Make changes to the table.</DialogDescription>
           </DialogHeader>
           {actions}
@@ -53,7 +53,7 @@ export function CustomDrawerDialog({
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit Table</DrawerTitle>
+          <DrawerTitle>Options</DrawerTitle>
           <DrawerDescription>Make changes to the table.</DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-1 px-4">{actions}</div>

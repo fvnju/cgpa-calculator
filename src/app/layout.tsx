@@ -18,13 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} text-white`}>
       <head>
-        {process.env.NODE_ENV === "development" && (
+        {/* {process.env.NODE_ENV === "development" && (
           <Script
             strategy="afterInteractive"
             crossOrigin="anonymous"
             src="//unpkg.com/react-scan/dist/auto.global.js"
           />
-        )}
+        )} */}
       </head>
 
       <body className="max-h-dvh overflow-hidden overscroll-none">

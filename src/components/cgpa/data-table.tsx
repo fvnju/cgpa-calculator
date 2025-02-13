@@ -127,25 +127,25 @@ export function DataTable<TData, TValue>({
           </Tooltip>
         </TooltipProvider>
 
-        <div className="flex gap-2">
-          <Button
-            className="rounded-xl"
-            disabled={
-              !(
-                table.getIsAllPageRowsSelected() ||
-                table.getIsSomePageRowsSelected()
-              )
-            }
-            variant={"outline"}
-            onClick={() => {
-              CSVDownloader(courses, "file.csv");
-            }}
-          >
-            Export as CSV
-          </Button>
+        <div className="flex flex-col-reverse items-end gap-2 sm:flex-row sm:items-start">
           <CustomDrawerDialog
             actions={
-              <>
+              <div className="mb-4 flex w-full flex-col gap-2">
+                <Button
+                  className="rounded-xl"
+                  disabled={
+                    !(
+                      table.getIsAllPageRowsSelected() ||
+                      table.getIsSomePageRowsSelected()
+                    )
+                  }
+                  variant={"outline"}
+                  onClick={() => {
+                    CSVDownloader(courses, "file.csv");
+                  }}
+                >
+                  Export as CSV
+                </Button>
                 <Button
                   className="flex-grow rounded-xl md:flex-grow-0"
                   disabled={
@@ -166,7 +166,7 @@ export function DataTable<TData, TValue>({
                 >
                   Delete
                 </Button>
-              </>
+              </div>
             }
           >
             <Button variant={"ghost"}>
@@ -312,7 +312,7 @@ export function DataTable<TData, TValue>({
         </ScrollArea>
       </div>
 
-      <div className="text-sm text-muted-foreground">
+      <div className="mt-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>

@@ -93,74 +93,54 @@ function CourseForm({
 }: React.ComponentProps<"form"> & {
   state: ReturnType<typeof React.useState<boolean>>;
 }) {
-  const form = useForm();
-  const courseRef = React.useRef<HTMLInputElement>(null);
-  const creditRef = React.useRef<HTMLInputElement>(null);
-  const gradeRef = React.useRef("");
+  const [isOpen, setIsOpen] = state;
+  const [courseArray, setCourseArray] = useAtom(courseArrayAtom);
 
-  const [_, setCourseArray] = useAtom(courseArrayAtom);
+  const [courseName, setCourseName] = useAtom(courseAddInfoArray[0]);
+  const [courseCredit, setCourseCredit] = useAtom(courseAddInfoArray[1]);
+  const [courseIndex, setCourseIndex] = useAtom(courseAddInfoArray[2]);
+
+  const buttonHandler = React.useCallback(() => {
+    const grades = ["A", "B", "C", "D", "E", "F"];
+    // TODO: test
+    const courseInfo: Course = {
+      selected: false,
+      course: courseName,
+      credit: courseCredit,
+      // @ts-expect-error didn't type properly
+      grade: grades[courseIndex],
+    };
+    const { success } = courseSchema.safeParse(courseInfo);
+    if (success) {
+      setCourseArray((prev) => [...prev, courseInfo]);
+      toast.success("Course added successfully.");
+      setIsOpen(false);
+    } else {
+      toast.warning("Fill form properly.");
+    }
+  }, [courseCredit, courseIndex, courseName, setCourseArray]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setCourseName("");
+      setCourseCredit(0);
+      setCourseIndex(5);
+    }
+  }, [isOpen, setCourseName, setCourseCredit, setCourseIndex]);
 
   return (
-    <form
-      onSubmit={form.handleSubmit(() => {
-        const newData = {
-          course: courseRef.current!.value,
-          credit: Number(creditRef.current!.value),
-          grade: gradeRef.current as "A" | "B" | "C" | "D" | "E" | "F",
-        };
-        const og = _.filter((value) => value.course !== newData.course);
-        setCourseArray([...og, newData]);
-        state[1](false);
-      })}
-      className={cn("grid items-start gap-4", className)}
-    >
-      <div className="grid gap-2">
-        <Label htmlFor="course">Course</Label>
-        <Input
-          ref={courseRef}
-          className="rounded-xl"
-          type="text"
-          id="course"
-          placeholder="MTH 101"
-        />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="credit">Credit</Label>
-        <Input
-          className="rounded-xl"
-          id="credit"
-          type="number"
-          ref={creditRef}
-        />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="grade">Grade</Label>
-        <Select
-          name="grade"
-          onValueChange={(value) => {
-            gradeRef.current = value;
-          }}
-        >
-          <SelectTrigger className="w-[180px] rounded-xl">
-            <SelectValue id="grade" placeholder="Grade" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            {["A", "B", "C", "D", "E", "F"].map((value, index) => (
-              <SelectItem
-                className="rounded-xl"
-                key={value + index}
-                value={value}
-              >
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <Button className="mt-4 rounded-xl" type="submit">
-        Save changes
+    <div className={cn("grid gap-8", className)}>
+      <CourseCodeEntry />
+      <NumberOfCredits />
+      <GradeComponent />
+      <Button
+        role="button"
+        className="w-full rounded-xl"
+        onClick={buttonHandler}
+      >
+        Add Course
       </Button>
-    </form>
+    </div>
   );
 }
 
@@ -269,6 +249,12 @@ import { useEffect, useState } from "react";
 import Link from "next/dist/client/link";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  courseAddInfoArray,
+  CourseCodeEntry,
+  GradeComponent,
+  NumberOfCredits,
+} from "./add-course";
 
 export function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
