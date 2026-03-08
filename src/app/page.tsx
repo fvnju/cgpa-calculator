@@ -1,59 +1,78 @@
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowUpRight, Menu } from "lucide-react";
 
-import Logo from "~/components/Logo";
-import { HydrateClient } from "~/trpc/server";
-import { LineShadowText } from "~/components/magicui/line-shadow-text";
-
-import { Suspense } from "react";
-import { AnimatedShinyText } from "~/components/magicui/animated-shiny-text";
-import { cn } from "~/lib/utils";
-import { Button } from "~/components/ui/button";
-
-export default async function Home() {
+export default function Home() {
   return (
-    <HydrateClient>
-      <main className="flex min-h-dvh flex-col items-center justify-center bg-[#121212] text-white">
-        <div className="flex h-16 w-full items-center justify-between border-b-2 border-[#37474F]/20 px-6 sm:px-12">
-          <Logo />
-          <Button variant={"link"} role="button" asChild>
-            <Link href={"/release-notes"}>Realease Notes</Link>
-          </Button>
-        </div>
-        <div className="flex w-full flex-grow flex-col items-center justify-center px-6 py-6 sm:px-12">
-          <div className="flex flex-col gap-4">
-            <div className="z-10 flex">
-              <div
-                className={cn(
-                  "group rounded-full border border-white/5 bg-neutral-900 text-xs font-semibold transition-all ease-in hover:cursor-pointer hover:bg-neutral-800 sm:text-base sm:font-normal",
-                )}
-              >
-                <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
-                  <span>✨ Still in Alpha</span>
-                </AnimatedShinyText>
-              </div>
-            </div>
-            <h1 className="text-balance text-center text-5xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
-              Calculate Your{" "}
-              <Suspense
-                fallback={<span className="italic text-[#ffff00]">CGPA</span>}
-              >
-                <LineShadowText
-                  className="italic text-[#ffff00]"
-                  shadowColor={"white"}
-                >
-                  CGPA.
-                </LineShadowText>
-              </Suspense>
+    <main className="flex min-h-dvh w-full flex-col bg-[#ff6d5a]">
+      {/* Navigation */}
+      <nav className="fixed top-0 z-50 flex w-full items-center justify-between px-6 py-5 sm:px-10">
+        <button
+          aria-label="Menu"
+          className="flex h-10 w-10 items-center justify-center text-white/90 transition-colors hover:text-white"
+        >
+          <Menu className="h-6 w-6" strokeWidth={2.5} />
+        </button>
+
+        {/* Center logo */}
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 2.33333V25.6667M22.2496 5.75042L5.75046 22.2496M25.6667 14H2.33337M22.2496 22.2496L5.75046 5.75042"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
+
+        {/* Try the app link */}
+        <Link
+          href="/app"
+          className="flex items-center gap-1.5 text-sm font-medium tracking-wide text-white/90 transition-colors hover:text-white"
+        >
+          Try the app
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+        </Link>
+      </nav>
+
+      {/* Hero image container */}
+      <div className="relative flex w-full flex-1 px-0">
+        <div className="relative flex-1 overflow-hidden rounded-b-[2.5rem] sm:rounded-b-[3.5rem]">
+          <Image
+            src="https://images.pexels.com/photos/9572362/pexels-photo-9572362.jpeg"
+            alt="Students studying together"
+            fill
+            priority
+            className="object-cover"
+          />
+          {/* Dark gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/50" />
+
+          {/* Hero headline */}
+          <div className="absolute inset-x-0 bottom-12 flex flex-col items-center px-6 sm:bottom-16 md:bottom-20">
+            <h1 className="text-center font-[family-name:var(--font-geist-sans)] text-4xl font-bold leading-[1.05] tracking-tight text-[#f5f1eb] sm:text-6xl md:text-7xl lg:text-8xl">
+              Know your grade.
+              <br />
+              Own your future.
             </h1>
           </div>
-
-          <Link href={"/demo"} className="btn-glitch-fill group mt-10">
-            <span className="text">{`// Get Started`}</span>
-            <span className="text-decoration"> _</span>
-            <span className="decoration">⇒</span>
-          </Link>
         </div>
-      </main>
-    </HydrateClient>
+      </div>
+
+      {/* Subtitle section on accent background */}
+      <div className="flex items-center justify-center px-6 py-8 sm:py-10">
+        <p className="text-center font-[family-name:var(--font-geist-sans)] text-sm font-medium tracking-wide text-white/90 sm:text-base">
+          Calculate your CGPA on a 5.0 scale. Visual. Instant. Free.
+        </p>
+      </div>
+    </main>
   );
 }

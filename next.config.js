@@ -6,6 +6,22 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "plus.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+    ],
+  },
   async redirects() {
     return [
       {
