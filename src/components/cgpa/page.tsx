@@ -1,11 +1,23 @@
 "use client";
+import Link from "next/link";
+import { atom, useAtom, useAtomValue } from "jotai";
+import Papa from "papaparse";
+import * as React from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import Logo from "~/components/Logo";
 import { DataTable } from "./data-table";
 import { columns, courseSchema, type Course } from "./columns";
+import {
+  courseAddInfoArray,
+  CourseCodeEntry,
+  GradeComponent,
+  NumberOfCredits,
+} from "./add-course";
 import { Button } from "~/components/ui/button";
 import { Toaster } from "~/components/ui/sonner";
 
-import * as React from "react";
 import { cn } from "~/lib/utils";
 import {
   Dialog,
@@ -26,17 +38,6 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { useForm } from "react-hook-form";
-import { atom, useAtomValue, useAtom } from "jotai";
-import Papa from "papaparse";
 
 export const courseArrayAtom = atom<Course[]>([]);
 const storageLocation = "demoTranscript";
@@ -94,7 +95,7 @@ function CourseForm({
   state: ReturnType<typeof React.useState<boolean>>;
 }) {
   const [isOpen, setIsOpen] = state;
-  const [courseArray, setCourseArray] = useAtom(courseArrayAtom);
+  const [, setCourseArray] = useAtom(courseArrayAtom);
 
   const [courseName, setCourseName] = useAtom(courseAddInfoArray[0]);
   const [courseCredit, setCourseCredit] = useAtom(courseAddInfoArray[1]);
@@ -118,9 +119,9 @@ function CourseForm({
     } else {
       toast.warning("Fill form properly.");
     }
-  }, [courseCredit, courseIndex, courseName, setCourseArray]);
+  }, [courseCredit, courseIndex, courseName, setCourseArray, setIsOpen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isOpen) {
       setCourseName("");
       setCourseCredit(0);
@@ -147,7 +148,7 @@ function CourseForm({
 export default function Page() {
   const [courses, setCourses] = useAtom(courseArrayAtom);
 
-  useEffect(() => {
+  React.useEffect(() => {
     localStorage.setItem(storageLocation, JSON.stringify(courses));
     console.log("store change");
   }, [courses]);
@@ -245,21 +246,10 @@ export default function Page() {
   );
 }
 
-import { useEffect, useState } from "react";
-import Link from "next/dist/client/link";
-import { toast } from "sonner";
-import { z } from "zod";
-import {
-  courseAddInfoArray,
-  CourseCodeEntry,
-  GradeComponent,
-  NumberOfCredits,
-} from "./add-course";
-
 export function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const mediaQuery = window.matchMedia(query);
     const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
 

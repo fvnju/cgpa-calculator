@@ -3,8 +3,6 @@
 import {
   type FC,
   useCallback,
-  useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -14,7 +12,6 @@ import { Button } from "../ui/button";
 import { Minus, Plus } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Popover, PopoverContent } from "../ui/popover";
 import {
   Command,
   CommandEmpty,

@@ -22,7 +22,6 @@ import {
 } from "@xyflow/react";
 import {
   BookOpen,
-  ChevronDown,
   GraduationCap,
   Plus,
   Trash2,
@@ -171,7 +170,7 @@ function DashedEdge({
       }}
       className="react-flow__edge-path"
       d={edgePath}
-      markerEnd={markerEnd as string}
+      markerEnd={markerEnd}
     />
   );
 }
