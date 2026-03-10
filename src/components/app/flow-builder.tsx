@@ -338,11 +338,13 @@ function PropertiesPanel({
   cgpa,
   onClose,
   onUpdate,
+  onDelete,
 }: {
   node: CGPANode;
   cgpa: number;
   onClose: () => void;
   onUpdate: (id: string, data: Partial<SemesterNodeData>) => void;
+  onDelete: (id: string) => void;
 }) {
   const data = node.data;
   const gpa = semesterGpa(data);
@@ -413,13 +415,23 @@ function PropertiesPanel({
             )}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="grid h-7 w-7 place-items-center rounded-md text-[#999] transition hover:bg-[#eee] hover:text-[#555]"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onDelete(node.id)}
+            className="grid h-7 w-7 place-items-center rounded-md text-[#999] transition hover:bg-[#fff0f0] hover:text-[#e53935]"
+            title="Delete semester"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-7 w-7 place-items-center rounded-md text-[#999] transition hover:bg-[#eee] hover:text-[#555]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Semester name */}
@@ -929,6 +941,22 @@ function CGPACalculatorCanvas() {
     setSelectedNodeId(newNode.id);
   }, [nodes, setNodes, setEdges, reactFlow]);
 
+  const deleteSemester = useCallback(
+    (nodeId: string) => {
+      // Remove the node
+      setNodes((nds) => nds.filter((n) => n.id !== nodeId));
+      // Remove all edges connected to this node
+      setEdges((eds) =>
+        eds.filter((e) => e.source !== nodeId && e.target !== nodeId),
+      );
+      // Close the panel if the deleted node was selected
+      if (selectedNodeId === nodeId) {
+        setSelectedNodeId(null);
+      }
+    },
+    [setNodes, setEdges, selectedNodeId],
+  );
+
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-[#f5f1eb]">
       <TopBar />
@@ -974,6 +1002,7 @@ function CGPACalculatorCanvas() {
           cgpa={cgpa}
           onClose={() => setSelectedNodeId(null)}
           onUpdate={handleNodeUpdate}
+          onDelete={deleteSemester}
         />
       )}
 
