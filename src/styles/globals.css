@@ -74,6 +74,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
 
 /* From Uiverse.io by Awadhesh684827 */

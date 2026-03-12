@@ -4,7 +4,7 @@ import { ArrowUpRight, Menu } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-dvh w-full flex-col bg-[#ff6d5a]">
+    <main className="flex min-h-dvh w-full flex-col bg-[#ff6d5a] max-h-dvh overflow-hidden overscroll-none">
       {/* Navigation */}
       <nav className="fixed top-0 z-50 flex w-full items-center justify-between px-6 py-5 sm:px-10">
         <button

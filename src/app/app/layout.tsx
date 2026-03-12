@@ -7,8 +7,8 @@ import { TRPCReactProvider } from "~/trpc/react";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "GradeGuru",
-  description: "Calculate your semester CGPA on a 5.0 scale.",
+  title: "Flow Builder | GradeGuru",
+  description: "Visual flow builder to see you GPA and CGPA.",
   icons: [{ rel: "icon", url: "/logomark.svg" }],
 };
 
@@ -45,7 +45,9 @@ export default function RootLayout({
       </head>
 
       <body className="">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+        </TRPCReactProvider>
       </body>
     </html>
   );
