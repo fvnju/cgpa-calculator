@@ -365,7 +365,7 @@ function NilePortalDialog({
               value={studentId}
               onChange={(e) => setStudentId(e.target.value)}
               disabled={loading}
-              className="h-9 rounded-lg border-[#e0d6cc] bg-white text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#5c6bc0]/30"
+              className="h-9 rounded-lg border-[#e0d6cc] bg-white text-base md:text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#5c6bc0]/30"
             />
           </div>
           <div>
@@ -378,7 +378,7 @@ function NilePortalDialog({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
-              className="h-9 rounded-lg border-[#e0d6cc] bg-white text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#5c6bc0]/30"
+              className="h-9 rounded-lg border-[#e0d6cc] bg-white text-base md:text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#5c6bc0]/30"
             />
           </div>
 
@@ -738,7 +738,7 @@ function PropertiesPanel({
         <Input
           value={data.label}
           onChange={(e) => onUpdate(node.id, { label: e.target.value })}
-          className="h-8 rounded-md border-[#e0d6cc] bg-white text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30"
+          className="h-8 rounded-md border-[#e0d6cc] bg-white text-base md:text-sm text-[#1a1a2e] shadow-none focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30"
         />
       </div>
 
@@ -803,7 +803,7 @@ function PropertiesPanel({
                     onChange={(e) =>
                       updateCourse(course.id, { name: e.target.value })
                     }
-                    className="h-7 border-0 bg-transparent px-1.5 text-xs text-[#1a1a2e] shadow-none placeholder:text-[#ccc] focus-visible:ring-0"
+                    className="h-7 border-0 bg-transparent px-1.5 text-base md:text-xs text-[#1a1a2e] shadow-none placeholder:text-[#ccc] focus-visible:ring-0"
                   />
                   <Select
                     value={course.grade}
@@ -861,7 +861,7 @@ function PropertiesPanel({
                         creditHours: Math.max(1, parseInt(e.target.value) || 1),
                       })
                     }
-                    className="h-7 border-[#e0d6cc] bg-transparent px-1.5 text-center text-xs text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="h-7 border-[#e0d6cc] bg-transparent px-1.5 text-center text-base md:text-xs text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
@@ -926,7 +926,7 @@ function PropertiesPanel({
                     ),
                   })
                 }
-                className="h-9 rounded-md border-[#e0d6cc] bg-white text-sm text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="h-9 rounded-md border-[#e0d6cc] bg-white text-base md:text-sm text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
             <div>
@@ -944,7 +944,7 @@ function PropertiesPanel({
                     directCredits: Math.max(0, parseInt(e.target.value) || 0),
                   })
                 }
-                className="h-9 rounded-md border-[#e0d6cc] bg-white text-sm text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="h-9 rounded-md border-[#e0d6cc] bg-white text-base md:text-sm text-[#1a1a2e] shadow-none [appearance:textfield] focus-visible:ring-1 focus-visible:ring-[#ff6d5a]/30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
 
@@ -1122,13 +1122,13 @@ function exportJson(nodes: CGPANode[], cgpa: number) {
         credits: semesterCredits(d),
         ...(d.mode === "courses"
           ? {
-              courses: d.courses.map((c) => ({
-                name: c.name,
-                grade: c.grade,
-                gradePoints: gradePoint(c.grade),
-                creditHours: c.creditHours,
-              })),
-            }
+            courses: d.courses.map((c) => ({
+              name: c.name,
+              grade: c.grade,
+              gradePoints: gradePoint(c.grade),
+              creditHours: c.creditHours,
+            })),
+          }
           : { directGpa: d.directGpa, directCredits: d.directCredits }),
       };
     }),
@@ -1154,16 +1154,16 @@ function exportPdf(nodes: CGPANode[], cgpa: number) {
       const courseRows =
         d.mode === "courses"
           ? d.courses
-              .map(
-                (c) =>
-                  `<tr>
+            .map(
+              (c) =>
+                `<tr>
                     <td style="padding:4px 8px;color:#555;font-size:11px;">${c.name}</td>
                     <td style="padding:4px 8px;text-align:center;font-size:11px;">${c.grade}</td>
                     <td style="padding:4px 8px;text-align:center;font-size:11px;">${c.creditHours}</td>
                     <td style="padding:4px 8px;text-align:center;font-size:11px;">${(gradePoint(c.grade) * c.creditHours).toFixed(1)}</td>
                   </tr>`,
-              )
-              .join("")
+            )
+            .join("")
           : `<tr><td colspan="4" style="padding:4px 8px;color:#888;font-size:11px;font-style:italic;">Direct GPA entry</td></tr>`;
 
       return `
@@ -1482,7 +1482,7 @@ function AIChatPanel({
             onKeyDown={handleKeyDown}
             placeholder="Ask about your grades…"
             disabled={isBusy}
-            className="h-full flex-1 resize-none bg-transparent text-xs text-[#1a1a2e] placeholder:text-[#bbb] focus:outline-none disabled:opacity-60"
+            className="h-full flex-1 resize-none bg-transparent text-base md:text-xs text-[#1a1a2e] placeholder:text-[#bbb] focus:outline-none disabled:opacity-60"
           />
           <button
             type="submit"
@@ -1851,13 +1851,13 @@ function CGPACalculatorCanvas({
     const lastNode = nodes[nodes.length - 1];
     const newEdges: Edge[] = lastNode
       ? [
-          {
-            id: `e-${lastNode.id}-${newNode.id}`,
-            source: lastNode.id,
-            target: newNode.id,
-            type: "dashed",
-          },
-        ]
+        {
+          id: `e-${lastNode.id}-${newNode.id}`,
+          source: lastNode.id,
+          target: newNode.id,
+          type: "dashed",
+        },
+      ]
       : [];
 
     setNodes((nds) => [...nds, newNode]);
@@ -1896,13 +1896,13 @@ function CGPACalculatorCanvas({
       const bridgeEdge: Edge[] =
         nodes.length > 0
           ? [
-              {
-                id: `e-${nodes[nodes.length - 1]!.id}-${positioned[0]!.id}`,
-                source: nodes[nodes.length - 1]!.id,
-                target: positioned[0]!.id,
-                type: "dashed",
-              },
-            ]
+            {
+              id: `e-${nodes[nodes.length - 1]!.id}-${positioned[0]!.id}`,
+              source: nodes[nodes.length - 1]!.id,
+              target: positioned[0]!.id,
+              type: "dashed",
+            },
+          ]
           : [];
 
       setNodes((nds) => [...nds, ...positioned]);
