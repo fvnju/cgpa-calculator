@@ -2136,12 +2136,27 @@ function OnboardingScreen({
 /* ------------------------------------------------------------------ */
 
 export function FlowBuilder() {
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [startNodes, setStartNodes] = useState<CGPANode[]>(initialNodes);
+  const [startEdges, setStartEdges] = useState<Edge[]>(initialEdges);
+
+  const handleOnboardingComplete = (nodes: CGPANode[], edges: Edge[]) => {
+    setStartNodes(nodes);
+    setStartEdges(edges);
+    setOnboardingComplete(true);
+  };
+
+  if (!onboardingComplete) {
+    return (
+      <ReactFlowProvider>
+        <OnboardingScreen onComplete={handleOnboardingComplete} />
+      </ReactFlowProvider>
+    );
+  }
+
   return (
     <ReactFlowProvider>
-      <CGPACalculatorCanvas
-        startNodes={initialNodes}
-        startEdges={initialEdges}
-      />
+      <CGPACalculatorCanvas startNodes={startNodes} startEdges={startEdges} />
     </ReactFlowProvider>
   );
 }
